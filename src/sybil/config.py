@@ -6,14 +6,14 @@ import torch
 
 @dataclass
 class SybilConfig:
-    draft_model: str = "gpt2"
-    target_model: str = "gpt2-medium"
+    draft_model: str = "gpt2-medium"
+    target_model: str = "gpt2-large"
 
 
     num_speculative_tokens: int = 5  
 
 
-    prompt: str = "The fundamental nature of power is"
+    prompt: str = "The most important concept in the field of Quantum mechanics is"
     max_new_tokens: int = 50
     do_sample: bool = False      
     temperature: float = 1.0

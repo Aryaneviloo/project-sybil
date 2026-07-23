@@ -1,6 +1,8 @@
 import torch
 from dataclasses import dataclass
 from typing import Any
+import logging
+logger = logging.getLogger("sybil")
 
 
 def trim_cache(past_key_values, keep_length: int):
@@ -41,8 +43,10 @@ class SpeculativeEngine:
         last_token = input_ids[:, -1:]
         accepted_len = prompt_len
         n_generated = 0
+        num_rounds = 0
 
         while n_generated < max_new_tokens:
+            num_rounds += 1
             draft_tokens, oracle_cache = self._draft(last_token, oracle_cache)
 
             accepted_tokens, sovereign_cache, new_last_token = self._verify(
@@ -61,6 +65,12 @@ class SpeculativeEngine:
             if n_generated >= max_new_tokens:
                 break
 
+        
+        avg_accept = n_generated / num_rounds if num_rounds else 0.0
+        logger.info(
+            "avg accepted tokens/round: %.2f out of K=%d (%d rounds)",
+            avg_accept, self.num_speculative_tokens, num_rounds,
+        )
         return n_generated
 
     def _draft(self, last_token, oracle_cache):
