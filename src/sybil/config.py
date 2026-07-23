@@ -6,8 +6,8 @@ import torch
 
 @dataclass
 class SybilConfig:
-    draft_model: str = "gpt2"
-    target_model: str = "gpt2"
+    draft_model: str = "Qwen/Qwen2.5-0.5B"
+    target_model: str = "Qwen/Qwen2.5-1.5B"
 
 
     num_speculative_tokens: int = 5  

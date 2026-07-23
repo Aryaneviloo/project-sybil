@@ -19,11 +19,16 @@ class SybilModelLoader:
             self.tokenizer.pad_token = self.tokenizer.eos_token
 
         logger.info("Loading draft model (Oracle): %s", config.draft_model)
-        self.oracle = AutoModelForCausalLM.from_pretrained(config.draft_model).to(self.device)
+        dtype = torch.float16 if self.device == "cuda" else torch.float32
+        self.oracle = AutoModelForCausalLM.from_pretrained(
+            config.draft_model, torch_dtype=dtype
+        ).to(self.device)
         self.oracle.eval()
 
         logger.info("Loading target model (Sovereign): %s", config.target_model)
-        self.sovereign = AutoModelForCausalLM.from_pretrained(config.target_model).to(self.device)
+        self.sovereign = AutoModelForCausalLM.from_pretrained(
+            config.target_model, torch_dtype=dtype
+        ).to(self.device)
         self.sovereign.eval()
 
         logger.info("Models loaded.")
