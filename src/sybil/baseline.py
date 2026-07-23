@@ -25,3 +25,25 @@ def generate_baseline(model, tokenizer, prompt: str, max_new_tokens: int,
         n_generated += 1
 
     return n_generated
+
+@torch.no_grad()
+def generate_baseline_text(model, tokenizer, prompt: str, max_new_tokens: int, device: str) -> str:
+    """
+    Same generation loop as generate_baseline, but returns decoded text
+    instead of a token count. 
+    """
+    input_ids = tokenizer.encode(prompt, return_tensors="pt").to(device)
+
+    past_key_values = None
+    current_input = input_ids
+    generated_ids = []
+
+    for _ in range(max_new_tokens):
+        outputs = model(current_input, past_key_values=past_key_values, use_cache=True)
+        past_key_values = outputs.past_key_values
+
+        next_token = torch.argmax(outputs.logits[:, -1, :], dim=-1, keepdim=True)
+        generated_ids.append(next_token.item())
+        current_input = next_token
+
+    return tokenizer.decode(generated_ids)

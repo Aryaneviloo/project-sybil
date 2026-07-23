@@ -6,8 +6,8 @@ import torch
 
 @dataclass
 class SybilConfig:
-    draft_model: str = "gpt2-medium"
-    target_model: str = "gpt2-large"
+    draft_model: str = "gpt2"
+    target_model: str = "gpt2"
 
 
     num_speculative_tokens: int = 5  
