@@ -46,7 +46,7 @@ For each iteration:
 
 ## Current Results
 
-Hardware: NVIDIA GTX 1650 (8GB VRAM)
+Hardware: NVIDIA GTX 1650 (4GB VRAM)
 
 These are post-fix results. An early version had an off-by-one in logit indexing plus stale cache entries surviving a rejected draft; it ran without erroring and produced plausible-looking but wrong output. All pre-fix numbers were discarded.
 
